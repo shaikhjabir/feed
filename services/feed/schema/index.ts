@@ -1,3 +1,3 @@
-import { createFeedSchema } from "./createUserSchema"
+import { createFeedSchema } from "./createFeedSchema"
 
 export { createFeedSchema }

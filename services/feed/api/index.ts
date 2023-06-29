@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { controllerHandler } from "../../../shared/lib/controllerHandler";
-import { createFeed } from "../controller";
+import { createFeed, listFeed } from "../controller";
 import { createFeedSchema } from "../schema";
 import authenticate from "../../../shared/middlewares/authenticate";
 
@@ -12,8 +12,17 @@ router.post(
   controllerHandler({
     schema: createFeedSchema,
     controller: createFeed,
+    options: { transaction: true },
+  })
+);
+
+router.get(
+  "/list",
+  authenticate,
+  controllerHandler({
+    controller: listFeed,
     options: { transaction: false },
   })
 );
 
-export const userRouter = router;
+export const feedRouter = router;

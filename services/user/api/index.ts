@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { controllerHandler } from "../../../shared/lib/controllerHandler";
 import { adminUpdateUser, createUser, loginUser } from "../controller";
-
 import { createUserSchema, loginUserSchema, updateUserRoleAndPermissionSchema } from "../schema";
 import authenticate from "../../../shared/middlewares/authenticate";
 
@@ -12,7 +11,7 @@ router.post(
   controllerHandler({
     schema: loginUserSchema,
     controller: loginUser,
-    options: { transaction: false },
+    options: { transaction: true },
   })
 );
 
