@@ -15,13 +15,11 @@ UserAndFeedConnection.init(
   {
     userUUID: {
       type: DataTypes.UUID,
-      allowNull: false,
-      primaryKey: true,
+      allowNull: false
     },
     feedUUID: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,
+      type: DataTypes.UUID,
+      allowNull: false
     },
   },
   makeModelOptions(sequelize, "user_and_feed_connection")
