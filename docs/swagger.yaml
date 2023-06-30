@@ -1,0 +1,286 @@
+openapi: 3.0.9
+info:
+    title: Feed
+    version: "1.0.0"
+
+servers:
+    - url: localhost:3000/api/v1
+paths:
+    /user/login:
+        post:
+            summary: User Login
+            tags:
+                - User
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                    example: john@sample.com
+                                password:
+                                    type: string
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: Successful
+                                    payload:
+                                        type: object
+                                        properties:
+                                            token:
+                                                type: string
+
+                404:
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: password or email id is wrong
+
+                422:
+                    description: Unprocessable Entity
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: Unprocessed Entity
+                                    payload:
+                                        type: object
+                                        properties:
+                                            password:
+                                                type: object
+                                                properties:
+                                                    message:
+                                                        type: string
+                                                        example: password should be at least 8 characters
+
+    /user/create:
+        post:
+            summary: User Signup
+            tags:
+                - User
+            security:
+                - authBearer: []
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                name:
+                                    type: string
+                                email:
+                                    type: string
+                                    example: john@sample.com
+                                password:
+                                    type: string
+                                role:
+                                    type: array
+                                    example:
+                                        - Supser Admin
+                                        - Admin
+                                        - Basic
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: Successful
+
+                400:
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: User exists.
+
+    /user/update/roleAndPermission:
+        put:
+            summary: super admin can give delete feed permission to particular admin
+            tags:
+                - User
+            security:
+                - authBearer: []
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                    example: john@sample.com
+                                canDeleteFeed:
+                                    type: boolean
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: Successful
+
+    /feed/create:
+        post:
+            summary: create feed
+            tags:
+                - Feed
+            security:
+                - authBearer: []
+
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                name:
+                                    type: string
+                                    example: someone
+                                url:
+                                    example: someone.example.com
+                                description:
+                                    example: description
+
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    payload:
+                                        type: object
+                                        properties:
+                                            ticketUUID:
+                                                type: string
+
+    /feed/delete:
+        delete:
+            summary: delete feed for particular user token
+            tags:
+                - Feed
+            security:
+                - authBearer: []
+
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                feedUUID:
+                                    type: array
+                                    example: ["66839be5-f643-4a42-a96c-bdd1f0c21b01","1830993d-c283-4759-943d-4889880301fa"]
+                                
+
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    payload:
+                                        type: object
+                                        properties:
+                                            ticketUUID:
+                                                type: string
+
+
+    /feed/list:
+        get:
+            summary: list of feed for particular user token
+            tags:
+                - Feed
+            security:
+                - authBearer: []
+
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                feedUUID:
+                                    type: array
+                                    example: ["66839be5-f643-4a42-a96c-bdd1f0c21b01","1830993d-c283-4759-943d-4889880301fa"]
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    payload:
+                                        type: object
+                                        properties:
+                                            ticketUUID:
+                                                type: string
+
+              
+    
+    /feed/add/user:
+        post:
+            summary: add list of feed for particular user
+            tags:
+                - Feed
+            security:
+                - authBearer: []
+
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                userEmail:
+                                    example: someone@example.com
+                                feedUUID:
+                                    type: array
+                                    example: ["66839be5-f643-4a42-a96c-bdd1f0c21b01","1830993d-c283-4759-943d-4889880301fa"]
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    payload:
+                                        type: object
+                                        properties:
+                                            ticketUUID:
+                                                type: string          
